@@ -1,26 +1,17 @@
-let gamePlaying=true
-while(gamePlaying){
+const container= document.querySelector(".container")
+const buttons=document.querySelectorAll("button")
+const content=document.createElement('p')
 function getComputerChoice(){
  return  Math.random();
 }
 
-let computerChoice=getComputerChoice();
-console.log(computerChoice);
-
-function getHumanChoice(){
-    return prompt("What do you like to choose Rock,Paper,or Scissors")
-}
-
-let humanChoice=getHumanChoice();
-if (humanChoice === null) {
-    console.log("Game cancelled. Goodbye!");
-    gamePlaying = false;
-    break; // Stops the loop instantly without playing the round
-  }
-
-  // Normalize human choice to lowercase
-  humanChoice = humanChoice.toLowerCase().trim();
-
+let wins=0
+let loses=0
+buttons.forEach(button=> {
+  button.addEventListener("click", ()=>{
+   const humanChoice=button.innerHTML.trim().toLowerCase();
+   let computerChoice=getComputerChoice();
+  
 if (computerChoice<=1/3){
     computerChoice='rock'
 }
@@ -28,25 +19,35 @@ else if(computerChoice >1/3 &&computerChoice <=2/3){
     computerChoice='paper'
 }
 else{
-    computerChoice='Scissors'
+    computerChoice='scissors'
 }
 
-if (humanChoice==computerChoice){
-    console.log("it's a draw")
+if (humanChoice===computerChoice){
+    content.innerHTML=`computer choice : ${computerChoice} your choice : ${humanChoice} .it's a draw.<br> <br> Wins:${wins}<br>  Loses:${loses}`;
 }
 else if((computerChoice === 'rock' && humanChoice === 'paper') ||
    (computerChoice === 'paper' && humanChoice === 'scissors') ||
    (computerChoice === 'scissors' && humanChoice === 'rock')){
-    console.log(`computer choice ${computerChoice} and your choice ${humanChoice} you win `)
-
+    wins+=1
+    content.innerHTML=`computer choice : ${computerChoice} your choice : ${humanChoice} .you win.<br> <br> Wins:${wins}<br>  Loses:${loses} `;
 }
 else{
-  console.log(`computer choice ${computerChoice} and your choice ${humanChoice} you lose `)
-  
+    loses+=1
+    content.innerHTML=`computer choice : ${computerChoice} your choice : ${humanChoice} .you lose <br> <br> Wins:${wins}<br>  Loses:${loses}`;
 }
+if(wins>=5&&wins%5===0){
+    content.innerHTML+=`<br> You Win For this round`;
+}
+if (loses>=5&&loses%5===0)
+     content.innerHTML+=`<br> Computer Wins For this round`;
+  })
+})
+   
+if (container.contains(content)) {
+      container.removeChild(content);
+    } 
+else {
+      container.appendChild(content);
+    }
 
-if (!humanChoice) {
-    gamePlaying=false
-    break; // Stops the loop instantly
-  }
-}
+
